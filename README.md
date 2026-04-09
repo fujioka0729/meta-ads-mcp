@@ -23,9 +23,43 @@ meta-ads-mcp/
 
 - Node.js 18 以上
 - Claude Code インストール済み
-- Meta for Developers でアプリ作成済み（App ID / App Secret 取得済み）
 
-### 1. Skills のインストール
+### Step 1: Meta アプリの作成
+
+1. [developers.facebook.com](https://developers.facebook.com/) にアクセス
+2. 「マイアプリ」→「アプリを作成」
+3. **アプリタイプは必ず「ビジネス」を選択**（「生活者」だと広告系の権限が使えません）
+4. アプリ名を入力（`meta`, `facebook`, `insta` 等の商標は使用不可）
+5. ビジネスポートフォリオを選択（任意）
+6. 「アプリを作成」をクリック
+
+### Step 2: Marketing API の追加
+
+1. アプリのダッシュボード → 「アプリに製品を追加」
+2. 「**マーケティングAPI**」の「設定」をクリック
+3. 左メニューに「マーケティングAPI」が追加されることを確認
+
+### Step 3: App ID / App Secret の確認
+
+1. 左メニュー → 「アプリの設定」→「ベーシック」
+2. **アプリID** と **app secret**（「表示」をクリック）を控える
+
+### Step 4: アクセストークンの取得
+
+Graph API Explorer を使ってトークンを取得します。
+
+1. [Graph API Explorer](https://developers.facebook.com/tools/explorer/) にアクセス
+2. 右上の「Metaアプリ」で作成したアプリを選択
+3. 「許可を追加」欄に以下を1つずつ入力して追加:
+   - `ads_management`
+   - `ads_read`
+   - `read_insights`
+   - `business_management`
+4. 「**Generate Access Token**」をクリック
+5. Facebook ログイン画面で権限を許可
+6. 生成された**アクセストークンをコピー**（後で使います）
+
+### Step 5: Skills のインストール
 
 ```bash
 npx meta-ads-mcp setup-skills
@@ -33,7 +67,7 @@ npx meta-ads-mcp setup-skills
 
 `~/.claude/skills/meta-ads-api-skill/` に API リファレンスと操作ガイドがインストールされます。
 
-### 2. MCP サーバーの登録
+### Step 6: MCP サーバーの登録
 
 `~/.claude/settings.json` の `mcpServers` に追加:
 
@@ -48,19 +82,31 @@ npx meta-ads-mcp setup-skills
 }
 ```
 
-### 3. Claude Code を再起動
+### Step 7: Claude Code を再起動
 
-### 4. 認証設定
+### Step 8: MCP の設定
 
-Claude Code の会話で:
+Claude Code の会話で認証情報を設定します:
 
 ```
-Meta広告の認証設定をして
+meta_ads_configure({
+  ad_account_id: "act_XXXXX",
+  app_id: "あなたのアプリID",
+  app_secret: "あなたのApp Secret"
+})
 ```
 
-広告アカウント ID（act_XXXXX）・App ID・App Secret を入力すると `~/.config/meta-ads-mcp/config.json` に保存されます。
+#### 広告アカウント ID がわからない場合
 
-### 5. OAuth 認証
+設定後に以下で確認できます:
+
+```
+meta_ads_api_get({ path: "/me/adaccounts", query: { fields: "id,name" } })
+```
+
+### Step 9: トークンの保存
+
+#### 方法 A: OAuth 認証（ブラウザ）
 
 ```
 Meta広告の認証をして
@@ -68,19 +114,22 @@ Meta広告の認証をして
 
 ブラウザが開き Facebook ログイン画面が表示されます。認証完了後、long-lived トークン（60日有効）が自動保存されます。
 
-### 6. 動作確認
+> **Note**: ビジネスタイプのアプリでは OAuth フローが動作しない場合があります。その場合は方法 B を使ってください。
+
+#### 方法 B: Graph API Explorer のトークンを保存（推奨）
+
+Step 4 で取得したトークンを Claude Code の会話で貼り付けるだけです:
+
+```
+meta_ads_save_token({ access_token: "Step4で取得したトークン" })
+```
+
+自動的に long-lived トークン（60日有効）に交換して保存されます。
+
+### Step 10: 動作確認
 
 ```
 Meta広告のキャンペーン一覧を取得して
-```
-
-### ソースからビルドする場合
-
-```bash
-git clone <repository-url>
-cd meta-ads-mcp
-npm install
-npm run build
 ```
 
 ## MCP ツール一覧
@@ -93,6 +142,7 @@ npm run build
 | `meta_ads_api_list_paths` | 利用可能なエンドポイント一覧 |
 | `meta_ads_configure` | 認証情報設定 |
 | `meta_ads_authenticate` | OAuth認証（ブラウザ） |
+| `meta_ads_save_token` | トークン保存（Graph API Explorer用、long-lived自動交換） |
 | `meta_ads_auth_status` | 認証状態確認 |
 | `meta_ads_server_info` | サーバー情報表示 |
 
@@ -113,27 +163,24 @@ skills/meta-ads-api-skill/
     ├── campaign-management.md       # キャンペーン管理
     ├── adset-management.md          # 広告セット管理
     ├── ad-management.md             # 広告管理
-    ├── insights-reporting.md        # インサイト・レ��ート
+    ├── insights-reporting.md        # インサイト・レポート
     ├── audience-management.md       # オーディエンス管理
     └── troubleshooting.md           # トラブルシューティング
 ```
 
-## Meta アプリの作成
-
-1. [developers.facebook.com](https://developers.facebook.com/) でアプリを新規作成（タイプ: ビジネス）
-2. Marketing API 製品を追加
-3. Facebook Login の設定:
-   - 有効な OAuth リダイレクト URI: `http://localhost:9876/callback`
-   - Client OAuth Login: ON
-   - Web OAuth Login: ON
-4. 必要な権限:
-   - `ads_management` — 広告の作成・管理
-   - `ads_read` — 広告データの読み取り
-   - `business_management` — ビジネスマネージャアクセス
-   - `read_insights` — インサイトデータの読み取り
-5. App ID / App Secret を控える
-
 ## トラブルシューティング
+
+### アプリタイプを間違えた
+
+アプリタイプは作成後に変更できません。「生活者」で作成してしまった場合は、新しく「ビジネス」タイプでアプリを作り直してください。
+
+### 「Invalid Scopes」エラーが出る
+
+アプリタイプが「生活者」の場合、`ads_management` 等の広告系権限は使えません。「ビジネス」タイプでアプリを作り直してください。
+
+### OAuth 認証で「機能をご利用いただけません」
+
+ビジネスタイプのアプリでは通常の Facebook ログインではなく「ビジネス向け Facebook ログイン」が使われます。Graph API Explorer でトークンを取得する方法（Step 4 + Step 9 方法 B）を使ってください。
 
 ### MCP サーバーが認識されない
 
@@ -144,18 +191,33 @@ skills/meta-ads-api-skill/
 ### 認証エラー (OAuthException)
 
 - トークンの有効期限を確認: `meta_ads_auth_status` ツール
-- トークン期限切れの場合は再認証: `meta_ads_authenticate` ツール
+- トークン期限切れの場合は Step 4 → Step 9 でトークンを再取得
 - トークンキャッシュを削除: `rm ~/.config/meta-ads-mcp/tokens.json`
 
 ### 権限不足
 
-- Meta for Developers でアプリの権限設定を確認
+- Graph API Explorer で必要な権限を追加してトークンを再生成
 - 開発モードでは自分のアカウントのみアクセス可能
 - 他ユーザーのアカウントにアクセスするにはアプリレビューが必要
+
+### トークンの有効期限
+
+- Graph API Explorer で取得したトークン: 約1-2時間
+- long-lived トークン（交換後）: 約60日
+- 期限切れ後は Step 4 → Step 9 でトークンを再取得
 
 ### レート制限
 
 Meta Ads API のレート制限は広告アカウント単位。制限に達した場合は数分待ってから再試行してください。
+
+## ソースからビルドする場合
+
+```bash
+git clone https://github.com/fujioka0729/meta-ads-mcp.git
+cd meta-ads-mcp
+npm install
+npm run build
+```
 
 ## ライセンス
 

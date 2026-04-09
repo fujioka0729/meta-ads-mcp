@@ -17,6 +17,7 @@ if (command === "setup-skills") {
   const { register: registerApiPost } = await import("./tools/api-post.js");
   const { register: registerApiDelete } = await import("./tools/api-delete.js");
   const { register: registerApiListPaths } = await import("./tools/api-list-paths.js");
+  const { register: registerSaveToken } = await import("./tools/save-token.js");
 
   const server = new McpServer({
     name: "meta-ads-mcp",
@@ -32,6 +33,7 @@ if (command === "setup-skills") {
   registerApiPost(server);
   registerApiDelete(server);
   registerApiListPaths(server);
+  registerSaveToken(server);
 
   const transport = new StdioServerTransport();
   await server.connect(transport);
