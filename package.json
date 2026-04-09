@@ -1,0 +1,42 @@
+{
+  "name": "meta-ads-mcp",
+  "version": "0.1.0",
+  "description": "Meta Ads API を Claude Code から操作するための MCP サーバー",
+  "type": "module",
+  "bin": {
+    "meta-ads-mcp": "./bin/meta-ads-mcp.js"
+  },
+  "files": [
+    "bin/",
+    "dist/",
+    "skills/"
+  ],
+  "keywords": [
+    "meta",
+    "facebook",
+    "ads",
+    "mcp",
+    "claude",
+    "api"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fujioka0729/meta-ads-mcp.git"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "npx esbuild ./src/index.ts --bundle --platform=node --format=esm --outfile=./bin/meta-ads-mcp.js --minify && echo '#!/usr/bin/env node' | cat - ./bin/meta-ads-mcp.js > /tmp/meta-ads-mcp-tmp.js && mv /tmp/meta-ads-mcp-tmp.js ./bin/meta-ads-mcp.js && chmod +x ./bin/meta-ads-mcp.js",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "zod": "^3.24.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "esbuild": "^0.27.4",
+    "typescript": "^5.8.3",
+    "vitest": "^4.1.2"
+  }
+}

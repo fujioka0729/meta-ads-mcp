@@ -1,0 +1,22 @@
+[
+  { "path": "/act_{ad_account_id}/campaigns", "methods": ["GET", "POST"], "description": "キャンペーン一覧取得・作成" },
+  { "path": "/{campaign_id}", "methods": ["GET", "POST", "DELETE"], "description": "キャンペーン詳細・更新・削除" },
+  { "path": "/{campaign_id}/insights", "methods": ["GET"], "description": "キャンペーンインサイト" },
+  { "path": "/act_{ad_account_id}/adsets", "methods": ["GET", "POST"], "description": "広告セット一覧取得・作成" },
+  { "path": "/{adset_id}", "methods": ["GET", "POST", "DELETE"], "description": "広告セット詳細・更新・削除" },
+  { "path": "/{adset_id}/insights", "methods": ["GET"], "description": "広告セットインサイト" },
+  { "path": "/act_{ad_account_id}/ads", "methods": ["GET", "POST"], "description": "広告一覧取得・作成" },
+  { "path": "/{ad_id}", "methods": ["GET", "POST", "DELETE"], "description": "広告詳細・更新・削除" },
+  { "path": "/{ad_id}/insights", "methods": ["GET"], "description": "広告インサイト" },
+  { "path": "/act_{ad_account_id}/adcreatives", "methods": ["GET", "POST"], "description": "クリエイティブ一覧取得・作成" },
+  { "path": "/{creative_id}", "methods": ["GET", "DELETE"], "description": "クリエイティブ詳細・削除" },
+  { "path": "/act_{ad_account_id}/customaudiences", "methods": ["GET", "POST"], "description": "カスタムオーディエンス一覧取得・作成" },
+  { "path": "/{audience_id}", "methods": ["GET", "POST", "DELETE"], "description": "オーディエンス詳細・更新・削除" },
+  { "path": "/act_{ad_account_id}/insights", "methods": ["GET"], "description": "アカウントレベルインサイト" },
+  { "path": "/act_{ad_account_id}/adimages", "methods": ["GET", "POST"], "description": "広告画像一覧取得・アップロード" },
+  { "path": "/act_{ad_account_id}/advideos", "methods": ["GET", "POST"], "description": "広告動画一覧取得・アップロード" },
+  { "path": "/act_{ad_account_id}/targeting_browse", "methods": ["GET"], "description": "ターゲティングブラウズ" },
+  { "path": "/act_{ad_account_id}/delivery_estimate", "methods": ["GET"], "description": "配信見積もり" },
+  { "path": "/act_{ad_account_id}", "methods": ["GET"], "description": "広告アカウント情報" },
+  { "path": "/me/adaccounts", "methods": ["GET"], "description": "自分の広告アカウント一覧" }
+]

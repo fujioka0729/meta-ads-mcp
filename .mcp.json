@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "meta-ads": {
+      "command": "node",
+      "args": [
+        "./bin/meta-ads-mcp.js"
+      ]
+    }
+  }
+}
