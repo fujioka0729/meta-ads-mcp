@@ -62,7 +62,7 @@ Graph API Explorer を使ってトークンを取得します。
 ### Step 5: Skills のインストール
 
 ```bash
-npx meta-ads-mcp setup-skills
+npx graph-ads-mcp setup-skills
 ```
 
 `~/.claude/skills/meta-ads-api-skill/` に API リファレンスと操作ガイドがインストールされます。
@@ -76,7 +76,7 @@ npx meta-ads-mcp setup-skills
   "mcpServers": {
     "meta-ads": {
       "command": "npx",
-      "args": ["meta-ads-mcp"]
+      "args": ["graph-ads-mcp"]
     }
   }
 }
@@ -186,7 +186,7 @@ skills/meta-ads-api-skill/
 
 - `settings.json` のパスが正しいか確認
 - Claude Code を再起動したか確認
-- `npx meta-ads-mcp` を直接実行してエラーが出ないか確認
+- `npx graph-ads-mcp` を直接実行してエラーが出ないか確認
 
 ### 認証エラー (OAuthException)
 
@@ -213,7 +213,7 @@ Meta Ads API のレート制限は広告アカウント単位。制限に達し�
 ## ソースからビルドする場合
 
 ```bash
-git clone https://github.com/fujioka0729/meta-ads-mcp.git
+git clone https://github.com/fujioka0729/graph-ads-mcp.git
 cd meta-ads-mcp
 npm install
 npm run build

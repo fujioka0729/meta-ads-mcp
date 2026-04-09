@@ -1,10 +1,10 @@
 {
-  "name": "meta-ads-mcp",
+  "name": "graph-ads-mcp",
   "version": "0.1.0",
   "description": "Meta Ads API を Claude Code から操作するための MCP サーバー",
   "type": "module",
   "bin": {
-    "meta-ads-mcp": "./bin/meta-ads-mcp.js"
+    "graph-ads-mcp": "./bin/meta-ads-mcp.js"
   },
   "files": [
     "bin/",
@@ -21,7 +21,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/fujioka0729/meta-ads-mcp.git"
+    "url": "https://github.com/fujioka0729/graph-ads-mcp.git"
   },
   "license": "MIT",
   "scripts": {
